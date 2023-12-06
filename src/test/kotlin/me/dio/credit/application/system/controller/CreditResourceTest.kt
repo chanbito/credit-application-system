@@ -63,6 +63,7 @@ class CreditResourceTest {
         .andExpect(MockMvcResultMatchers.jsonPath("$.dayFirstInstallment").value("22/04/2023"))
         .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfInstallments").value("5"))
         .andExpect(MockMvcResultMatchers.jsonPath("$.customer.firstName").value("Cami"))
+        .andDo(MockMvcResultHandlers.print())
       
 
     }
