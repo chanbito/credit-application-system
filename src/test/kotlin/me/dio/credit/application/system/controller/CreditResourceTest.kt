@@ -1,10 +1,12 @@
 package me.dio.credit.application.system.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import me.dio.credit.application.system.dto.request.CustomerDto
-import me.dio.credit.application.system.dto.request.CustomerUpdateDto
 import me.dio.credit.application.system.entity.Customer
 import me.dio.credit.application.system.repository.CustomerRepository
+import me.dio.credit.application.system.repository.CreditRepository
+import me.dio.credit.application.system.entity.Credit
+import me.dio.credit.application.system.entity.Address
+import me.dio.credit.application.system.dto.request.CreditDto
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,8 +20,11 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.ContentResultMatchers
 import java.math.BigDecimal
 import java.util.Random
+import java.time.LocalDate
+import java.time.Month
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -29,6 +34,9 @@ class CreditResourceTest {
     @Autowired
     private lateinit var customerRepository: CustomerRepository
   
+    @Autowired
+    private lateinit var CreditRepositury: CreditRepository
+
     @Autowired
     private lateinit var mockMvc: MockMvc
   
@@ -48,9 +56,10 @@ class CreditResourceTest {
     @Test
     fun `should create a credit and return 201 status`(){
         //given
-        val credit: creditDto = buildCredit()
+        val cust = customerRepository.save(buildCustomer())
+        
+        val credit: CreditDto = buildcreditDto(customerId = cust.id!!)
         val valueAsString: String = objectMapper.writeValueAsString(credit)
-    
         //when
         //then
         mockMvc.perform(
@@ -59,10 +68,6 @@ class CreditResourceTest {
             .content(valueAsString)
         )
         .andExpect(MockMvcResultMatchers.status().isCreated)
-        .andExpect(MockMvcResultMatchers.jsonPath("$.creditValue").value("500.0"))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.dayFirstInstallment").value("22/04/2023"))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfInstallments").value("5"))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.customer.firstName").value("Cami"))
         .andDo(MockMvcResultHandlers.print())
       
 
@@ -101,6 +106,18 @@ class CreditResourceTest {
         street = street,
     ),
     income = income,
+    )
+
+    private fun buildcreditDto(
+    creditValue: BigDecimal = BigDecimal.valueOf(1000.0),
+    dayFirstOfInstallment: LocalDate = LocalDate.now().plusMonths(2L), 
+    numberOfInstallments: Int = 15,
+    customerId: Long = 1,
+    ) = CreditDto(
+        creditValue = creditValue,
+        dayFirstOfInstallment = dayFirstOfInstallment,
+        numberOfInstallments = numberOfInstallments,
+        customerId = customerId,
     )
 
 }

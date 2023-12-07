@@ -268,18 +268,21 @@ class CustomerResourceTest {
     zipCode = zipCode,
     street = street
   )
+  
+  
+    private fun builderCustomerUpdateDto(
+      firstName: String = "CamiUpdate",
+      lastName: String = "CavalcanteUpdate",
+      income: BigDecimal = BigDecimal.valueOf(5000.0),
+      zipCode: String = "45656",
+      street: String = "Rua Updated"  
+    ): CustomerUpdateDto = CustomerUpdateDto(
+      firstName = firstName,
+      lastName = lastName,
+      income = income,
+      zipCode = zipCode,
+      street = street
+    )
+  
 
-  private fun builderCustomerUpdateDto(
-    firstName: String = "CamiUpdate",
-    lastName: String = "CavalcanteUpdate",
-    income: BigDecimal = BigDecimal.valueOf(5000.0),
-    zipCode: String = "45656",
-    street: String = "Rua Updated"
-  ): CustomerUpdateDto = CustomerUpdateDto(
-    firstName = firstName,
-    lastName = lastName,
-    income = income,
-    zipCode = zipCode,
-    street = street
-  )
 }
