@@ -36,6 +36,14 @@ tasks.withType(KotlinCompile).configureEach {
 	}
 }
 
+tasks.withType(Test) { 
+  testLogging {
+   
+    events "started", "skipped", "passed", "failed"
+   
+  }
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
