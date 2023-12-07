@@ -69,10 +69,30 @@ class CreditResourceTest {
         )
         .andExpect(MockMvcResultMatchers.status().isCreated)
         .andDo(MockMvcResultHandlers.print())
-      
-
     }
 
+    @Test
+    fun `should find all credits from a Customer`(){
+        //given
+        val cust = customerRepository.save(buildCustomer()) 
+        //when
+        //then
+        mockMvc.perform(
+            MockMvcRequestBuilders.get(URL)
+            .param("customerId", cust.id.toString())
+            .accept(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk)
+        .andDo(MockMvcResultHandlers.print())
+    }
+
+
+    @Test
+    fun `should find by creditCode`(){
+        //given
+        //when
+        //then
+    }
 
     private fun buildCredit(
     creditValue: BigDecimal = BigDecimal.valueOf(500.0),
